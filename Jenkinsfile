@@ -22,7 +22,10 @@ pipeline {
                 echo "Testing"
                 sh '''
                 echo "doing test stuff.."
-                python3 ../hello.py
+                cd ..
+                python3 hello.py
+                cd myapp
+                ls
                 '''
             }
         }
