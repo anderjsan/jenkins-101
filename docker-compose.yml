@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  jenkins-socat:
+    container_name: jenkins-socat
+    image: alpine/socat
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+    networks: 
+      - jenkins
+    restart: always
+    ports:
+      - "127.0.0.1:2375:2375"
+
+  jenkins-builder:
+    container_name: jenkins-builder
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins-builder-home:/var/jenkins_home
+      - jenkins-builder-certs:/certs/client:ro
+    ports:
+      - "8081:8080"
+  
+    depends_on:
+      - jenkins-socat
+  
+  jenkins-agent:
+    container_name: jenkins-agent
+    build:
+      context: .
+      dockerfile: Dockerfile-agent
+    restart: on-failure
+    volumes:
+      - jenkins-agent-home:/home/jenkins
+    networks:
+      - jenkins
+    depends_on:
+      - jenkins-builder
+      - jenkins-socat
+
+networks:
+  jenkins:
+    driver: bridge
+    
+volumes:
+  jenkins-builder-home:
+  jenkins-builder-certs:
+  jenkins-agent-home:
