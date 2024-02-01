@@ -14,8 +14,6 @@ pipeline {
                 sh '''
                 cd myapp
                 pip install -r requirements.txt
-                # python3 hello.py --name Anderson
-                ls
                 '''
             }
         }
@@ -25,6 +23,7 @@ pipeline {
                 sh '''
                 echo "doing test stuff.."
                 ls
+                # python3 hello.py --name Anderson
                 '''
             }
         }
