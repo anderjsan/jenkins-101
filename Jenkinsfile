@@ -13,7 +13,8 @@ pipeline {
                 echo "Building"
                 sh '''
                 cd myapp
-                python3 hello.py --name Anderson
+                pip --version
+                # python3 hello.py --name Anderson
                 ls
                 '''
             }
