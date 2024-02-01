@@ -12,8 +12,8 @@ pipeline {
             steps {
                 echo "Building"
                 sh '''
-                echo "doing build stuff.."
-                python3 --version
+                cd myapp
+                pip install -r requirements.txt
                 '''
             }
         }
@@ -22,7 +22,7 @@ pipeline {
                 echo "Testing"
                 sh '''
                 echo "doing test stuff.."
-                docker --version
+                python3 hello.py
                 '''
             }
         }
@@ -31,6 +31,8 @@ pipeline {
                 echo 'Deliver'
                 sh '''
                 echo "doing delivery stuff.."
+                python3 --version
+                docker --version
                 docker-compose --version
                 '''
             }
