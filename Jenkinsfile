@@ -13,6 +13,8 @@ pipeline {
                 echo "Building"
                 sh '''
                 cd myapp
+                python3 -m venv test_env
+                test_env\Scripts\activate
                 pip install -r requirements.txt
                 '''
             }
